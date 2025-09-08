@@ -4,8 +4,8 @@
 //ini_set("display_error", 1);
 
 header( "Access-Control-Allow-Origin: *" ); 
-header( "Content-type: application/json; charset: UTF-8" );
-header( "Access-Control-Allow-Methods: POST" );
+//header( "Content-type: application/json; charset: UTF-8" );
+header( "Access-Control-Allow-Methods: GET" );
 
 include( "../config/database.php" );
 include( "../classes/student.php" );
@@ -17,12 +17,12 @@ $connection = $db->connect();
 
 $student = new Student($connection); 
 
-     if( $_SERVER['REQUEST_METHOD'] === "POST" ){
+     if( $_SERVER['REQUEST_METHOD'] === "GET" ){
          
-         $param = json_decode(file_get_contents("php://input"));
+         $student_get_id = isset($_GET['id'])?intval($_GET['id']) : "";
          
-         if( !empty($param->id) ){
-             $student->id = $param->id; 
+         if( !empty( $student_get_id ) ){
+             $student->id = $student_get_id; 
              $student_data = $student->get_single_data(); 
 //             print_r($student_data); 
              
