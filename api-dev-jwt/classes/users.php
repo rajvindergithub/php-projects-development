@@ -54,6 +54,42 @@
             return array(); 
         }
         
+        public function check_login(){
+            
+            $email_query = "SELECT * FROM ".$this->users_tbl." WHERE email = ?"; 
+            
+            $email_obj = $this->conn->prepare($email_query);
+            
+            $email_obj->bind_param("s", $this->email);
+            
+            if($email_obj->execute()){
+                $data = $email_obj->get_result(); 
+                return $data->fetch_assoc(); 
+            }
+            
+            return array();
+            
+        }
+        
+        public function create_project(){
+            
+            $project_query = "Insert into ".$this->projects_tbl." SET user_id = ?, name = ?, description = ?, status = ?"
+            
+            $project_obj = $this->conn->prepare($project_query);
+            
+            $project_name = htmlspecialchars(strip_tags($this->project_name));
+            $description = htmlspecialchars(strip_tags($this->description));
+            $status = htmlspecialchars(strip_tags($this->status));
+            
+            $project_obj->bind_param("isss", $this->user_id, $this->project_name, $this->description, $this->status );
+            
+            if( $project_obj->execute()){
+                return true;
+            }else{
+                return false; 
+            }    
+        }
+        
         
     }
 
